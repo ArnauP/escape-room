@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QComboBox, QLabel, QMainWindow, QSystemTrayIcon, QMenu, QAction, qApp
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QComboBox, QLabel, QMainWindow, QSystemTrayIcon, QMenu, QAction, qApp, QLineEdit, QPushButton
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt
 
@@ -15,18 +15,70 @@ class MainView(QMainWindow):
 
     def build_ui(self):
         self.setWindowTitle('User login')
-        self.setFixedSize(100, 100)
+        self.setFixedSize(300, 350)
 
         # Init widgets
         self.main_widget = QWidget()
+
+        self.img_container = QLabel(self.main_widget)
+        img = QPixmap(PATH_ICON)
+        self.img_container.setPixmap(img.scaled(QSize(100, 100)))
+        self.img_container.setStyleSheet(
+            """
+            margin-bottom: 30px;
+            padding-left: 30px;
+            """
+            )
+
+        self.lbl_username = QLabel('Username')
+        self.le_username = QLineEdit('Admin')
+        self.lbl_password = QLabel('Password')
+        self.le_password = QLineEdit('password')
+        self.le_password.setEchoMode(QLineEdit.Password)
+
+        self.lbl_error = QLabel()
+        self.lbl_error.setStyleSheet(
+            """
+            color: red;
+            margin-top: 10px;
+            padding-left: 10px;
+            """
+        )
+        self.lbl_error.hide()
+
+        self.btn_confirm = QPushButton('Confirm')
+        self.btn_confirm.clicked.connect(self.on_confirmation)
 
         main_layout = QVBoxLayout()
         main_layout.setAlignment(Qt.AlignCenter)
 
         # Setup layouts
+        main_layout.addWidget(self.img_container)
+        main_layout.addWidget(self.lbl_username)
+        main_layout.addWidget(self.le_username)
+        main_layout.addWidget(self.lbl_password)
+        main_layout.addWidget(self.le_password)
+        main_layout.addWidget(self.lbl_error)
+        main_layout.addWidget(self.btn_confirm)
         self.main_widget.setLayout(main_layout)
 
         self.setCentralWidget(self.main_widget)
 
         self.show()
+
+    def reset_view(self):
+        self.lbl_error.setText('')
+        self.lbl_error.hide()
+    
+    def on_confirmation(self):
+        self.reset_view()
+        self.__ctrl.confirm_credentials(username=self.le_username.text(), 
+                                        password=self.le_password.text())
+    
+    def on_wrong_credentials(self):
+        self.lbl_error.setText('Wrong credentials')
+        self.lbl_error.show()
+    
+    def on_right_credentials(self):
+        pass
      
