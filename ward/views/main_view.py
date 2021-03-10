@@ -65,6 +65,11 @@ class MainView(QMainWindow):
         self.setCentralWidget(self.main_widget)
 
         self.show()
+    
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Enter or event.key() == Qt.Key_Return:
+            self.on_confirmation()
+        return super().keyPressEvent(event)
 
     def reset_view(self):
         self.lbl_error.setText('')
