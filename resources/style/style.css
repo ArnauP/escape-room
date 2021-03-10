@@ -21,6 +21,8 @@ QPushButton
     border-radius: 3px;
     outline: none;
     width: 70px;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 QPushButton:disabled
@@ -32,7 +34,7 @@ QPushButton:disabled
 
 QPushButton:pressed
 {
-    background-color: #373737;
+    background-color: #90a8ff;
     padding-top: -15px;
     padding-bottom: -17px;
 }
