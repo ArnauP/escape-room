@@ -85,5 +85,8 @@ class MainView(QMainWindow):
         self.lbl_error.show()
     
     def on_right_credentials(self):
+        # TODO: Logged in view
         pass
-     
+
+    def closeEvent(self, event):
+        self.__ctrl.close_all_promts()
