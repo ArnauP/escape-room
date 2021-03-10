@@ -27,6 +27,8 @@ QPushButton
 
 QPushButton:disabled
 {
+    background-color: #5a6897;
+    color: #999999;
     border-color: #454545;
     padding-left: 10px;
     padding-right: 10px;
@@ -62,6 +64,17 @@ QLineEdit
 {
     background-color: #232629;
     border: 1px solid #76797C;
+    border-radius: 2px;
+    padding: 5px;
+    max-width: 150px;
+    height: 15px;
+}
+
+QLineEdit:disabled
+{
+    background-color: #303030;
+    border: 1px solid #36393b;
+    color: #4a4a4a;
     border-radius: 2px;
     padding: 5px;
     max-width: 150px;

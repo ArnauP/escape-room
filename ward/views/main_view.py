@@ -14,7 +14,7 @@ class MainView(QMainWindow):
         self.build_ui()
 
     def build_ui(self):
-        self.setWindowTitle('User login')
+        self.setWindowTitle('Control Panel')
         self.setFixedSize(300, 350)
 
         # Init widgets
@@ -33,7 +33,7 @@ class MainView(QMainWindow):
         self.lbl_username = QLabel('Username')
         self.le_username = QLineEdit('Admin')
         self.lbl_password = QLabel('Password')
-        self.le_password = QLineEdit('password')
+        self.le_password = QLineEdit('test')
         self.le_password.setEchoMode(QLineEdit.Password)
 
         self.lbl_error = QLabel()
@@ -71,22 +71,32 @@ class MainView(QMainWindow):
             self.on_confirmation()
         return super().keyPressEvent(event)
 
-    def reset_view(self):
+    def reset_view(self, keep_pwd=True):
+        self.le_username.setEnabled(True)
+        self.le_password.setEnabled(True)
+        self.btn_confirm.setEnabled(True)
+        if not keep_pwd:
+            self.le_password.setText('')
         self.lbl_error.setText('')
         self.lbl_error.hide()
     
     def on_confirmation(self):
-        self.reset_view()
-        self.__ctrl.confirm_credentials(username=self.le_username.text(), 
-                                        password=self.le_password.text())
+        if self.__ctrl.allow_connections:
+            self.reset_view()
+            self.__ctrl.confirm_credentials(username=self.le_username.text(),
+                                            password=self.le_password.text())
+        else:
+            self.lbl_error.setText('Server did not respond.')
+            self.lbl_error.show()
     
     def on_wrong_credentials(self):
         self.lbl_error.setText('Wrong credentials')
         self.lbl_error.show()
     
     def on_right_credentials(self):
-        # TODO: Logged in view
-        pass
+        self.le_username.setEnabled(False)
+        self.le_password.setEnabled(False)
+        self.btn_confirm.setEnabled(False)
 
     def closeEvent(self, event):
         self.__ctrl.close_all_promts()
