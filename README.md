@@ -1,6 +1,6 @@
 # Control Panel
 
-This piece of software aims to recreate a control panel from a fictional spacecraft. This takes part as a test on a Room Escape. 
+This piece of software aims to recreate a control panel from a fictional spacecraft. It takes part in a room escape as the last test to pass. 
 
 ## Usage
 The user is meant to get find out the password to login to the spacecraft Control Panel. And once inside, find the way to shut down the system.
