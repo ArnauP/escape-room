@@ -4,10 +4,12 @@ from PyQt5.QtCore import QSize, Qt, QTimer, QThread, pyqtSignal
 from PyQt5.QtWidgets import QApplication
 from random import randint, choice
 from time import sleep
-import asyncio
 
 from ..constants import *
 from ..utils.utils import *
+
+import asyncio
+import shutil
 
 
 class ShutDownThread(QThread):
@@ -51,6 +53,8 @@ class TerminalView(QMainWindow):
         self.__prompt_type = prompt_type
         self.max_lines_prompted = 18
 
+        self.__awaiting_response = False
+
         if automatic:
             self.__timer = QTimer()
             self.__timer.timeout.connect(self.print_status)
@@ -89,11 +93,11 @@ class TerminalView(QMainWindow):
             }
             QLabel {
                 background-color: transparent;
-                color: green;
+                color: #43DE2F;
             }
             QLineEdit {
                 background-color: transparent;
-                color: green;
+                color: #43DE2F;
             }
             """
         )
@@ -125,33 +129,45 @@ class TerminalView(QMainWindow):
         return super().keyPressEvent(event)
 
     def parse_command(self, command):
-        if command == COMMAND_HELP:
-            self.echo_command(MSG_HELP_RESPONSE)
-        elif command == COMMAND_SYSTEM_SHUTDOWN:
-            self.__shutdown_thread = ShutDownThread()
-            self.__shutdown_thread.echo_msg.connect(self.echo_command)
-            self.__shutdown_thread.shut_down_done.connect(self.__ctrl.system_shutdown)
-            self.__shutdown_thread.start()
-        elif command in COMMAND_SYSTEM_STATUS:
-            self.echo_command('\n>> System status: RUNNING. \n'
-                              '    Process ID: 0x5239\n'
-                              '    Num. Threads: {}\n'.format(randint(20, 60)))
-        elif command in COMMAND_WEAPONS_ENABLE:
-            self.echo_command('\n>> Weapons already enabled.')
-        elif command in COMMAND_WEAPONS_DISABLE:
-            self.echo_command('\n>> Could not disable weapons.')
-        elif command in COMMAND_SERVER_STATUS:
-            self.echo_command('\n>> Server status: RUNNING. \n'
-                              '    Status code: 200\n'
-                              '    Error queue: Empty\n')
-        elif command == COMMAND_SERVER_KEY:
-            self.echo_command('\n>>  Downloading key...')
-        elif command in COMMAND_ENGINES_START:
-            self.echo_command('\n>> Engines already running.')
-        elif command in COMMAND_ENGINES_STOP:
-            self.echo_command('\n>> Could not stop engines.')
+        if not self.__awaiting_response:
+            if command == COMMAND_HELP:
+                self.echo_command(MSG_HELP_RESPONSE)
+            elif command == COMMAND_SYSTEM_SHUTDOWN:
+                self.__awaiting_response = True
+                self.echo_command('>> Required SYSTEM password:')
+            elif command in COMMAND_SYSTEM_STATUS:
+                self.echo_command('>> System status: RUNNING. \n'
+                                '    Process ID: 0x5239\n'
+                                '    Num. Threads: {}'.format(randint(20, 60)))
+            elif command in COMMAND_WEAPONS_ENABLE:
+                self.echo_command('>> Weapons already enabled.')
+            elif command in COMMAND_WEAPONS_DISABLE:
+                self.echo_command('>> Could not disable weapons.')
+            elif command in COMMAND_SERVER_STATUS:
+                self.echo_command('>> Server status: RUNNING. \n'
+                                '    Status code: 200\n'
+                                '    Error queue: Empty')
+            elif command == COMMAND_SERVER_KEY:
+                destination = 'key'
+                source = 'resources/server/key'
+                shutil.copyfile(source, destination) 
+                self.echo_command('>>  Downloading key...')
+                self.echo_command('>>  Done. \n      Key path: "{}"'.format(destination))
+            elif command in COMMAND_ENGINES_START:
+                self.echo_command('>> Engines already running.')
+            elif command in COMMAND_ENGINES_STOP:
+                self.echo_command('>> Could not stop engines.')
+            else:
+                self.echo_command('>> Unknown command.')
         else:
-            self.echo_command('>> Unknown command.')
+            if command == RESPONSE_SHUTDOWN_PASSWORD:
+                self.__shutdown_thread = ShutDownThread()
+                self.__shutdown_thread.echo_msg.connect(self.echo_command)
+                self.__shutdown_thread.shut_down_done.connect(self.__ctrl.system_shutdown)
+                self.__shutdown_thread.start()
+            else:
+                self.__awaiting_response = False
+                self.echo_command('>> Unauthorized acces. Wrong credentials.')
 
     def echo_command(self, command):
         current_lines = self.lbl_promt.text().split('\n')

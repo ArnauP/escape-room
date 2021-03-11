@@ -13,5 +13,10 @@ def load_style_sheet(stylesheet, obj):
     obj.setStyleSheet(QTextStream(file).readAll())
     file.close()
 
-def encode_image(image_path):
-    pass
+def encode_image(image_path, target_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+
+    f = open(target_path, "w")
+    f.write(encoded_string)
+    f.close()

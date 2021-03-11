@@ -19,7 +19,7 @@ class MainController(QObject):
         self.__prompt_commands = None
     
     def confirm_credentials(self, username, password):
-        if password == EXPECTED_PASSWORD:
+        if username == EXPECTED_USERNAME and password == EXPECTED_PASSWORD:
             self.__view.on_right_credentials()
             self.init_command_prompts()
         else:

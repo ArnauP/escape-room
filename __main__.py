@@ -7,7 +7,6 @@ from ward.constants import *
 
 
 def main():
-    print('hey')
     app = QApplication([])
     app.setWindowIcon(QIcon(get_path(PATH_ICON)))
     load_style_sheet(get_path(PATH_STYLE), app)

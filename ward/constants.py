@@ -15,6 +15,7 @@ STATUS_WEAPONS = ['ONLINE', 'ONLINE', 'ONLINE', 'ONLINE', 'OFFLINE', 'OFFLINE', 
 STATUS_ENGINES = ['RUNNING', 'RUNNING', 'RUNNING', 'RUNNING', 'RUNNING', 'OFFLINE', 'PENDING REPAIR']
 STATUS_SERVER = [200, 200, 200, 200, 200, 200, 404, 400, 503]
 
+EXPECTED_USERNAME = 'Admin'
 EXPECTED_PASSWORD = 'test'
 
 COMMAND_SYSTEM_SHUTDOWN = 'system shutdown'
@@ -26,6 +27,8 @@ COMMAND_SERVER_KEY = 'server key'
 COMMAND_ENGINES_START = 'engines start'
 COMMAND_ENGINES_STOP = 'engines stop'
 COMMAND_HELP = 'help'
+
+RESPONSE_SHUTDOWN_PASSWORD = 'WilliamSaw'
 
 MSG_HELP = '>> For command information use "{}".'.format(COMMAND_HELP)
 MSG_HELP_RESPONSE = '\n>> Options and arguments available:\n' \
