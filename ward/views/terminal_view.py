@@ -83,7 +83,6 @@ class TerminalView(QMainWindow):
         self.setWindowTitle(self.__title)
         self.setFixedSize(700, 300)
 
-        # Init widgets
         self.main_widget = QWidget()
 
         self.lbl_promt = QLabel()
@@ -119,7 +118,6 @@ class TerminalView(QMainWindow):
             """
         )
 
-        # Setup layouts
         main_layout.addWidget(self.lbl_promt)
         main_layout.addWidget(self.le_commands)
         self.main_widget.setLayout(main_layout)
