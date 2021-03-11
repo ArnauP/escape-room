@@ -43,9 +43,9 @@ MSG_HELP_RESPONSE = '\n>> Options and arguments available:\n' \
                     '               {}\n' \
                     '       - System commands:\n' \
                     '               {}\n' \
-                    '               {}\n'.format(COMMAND_SERVER_STATUS, COMMAND_SERVER_KEY, 
-                    COMMAND_WEAPONS_ENABLE, COMMAND_WEAPONS_DISABLE, COMMAND_ENGINES_START, 
-                    COMMAND_ENGINES_STOP, COMMAND_SYSTEM_STATUS, COMMAND_SYSTEM_SHUTDOWN)
+                    '               {}\n'.format(COMMAND_ENGINES_START, COMMAND_ENGINES_STOP,
+                                                 COMMAND_WEAPONS_ENABLE, COMMAND_WEAPONS_DISABLE, COMMAND_SERVER_STATUS,
+                                                 COMMAND_SERVER_KEY, COMMAND_SYSTEM_STATUS, COMMAND_SYSTEM_SHUTDOWN)
 MSG_AUTOMATIC_WEAPONS = [
     '>> [{}] - TURRET <{}{}> - {}',
     '>> [{}] - LASER CANON <{}{}> - {}',

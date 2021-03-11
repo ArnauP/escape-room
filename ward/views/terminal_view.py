@@ -1,5 +1,4 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QComboBox, QLabel, QMainWindow, QSystemTrayIcon, QMenu, QAction, qApp, QLineEdit, QPushButton
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QMainWindow, QLineEdit
 from PyQt5.QtCore import QSize, Qt, QTimer, QThread, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QFileDialog
 from random import randint, choice
@@ -142,21 +141,21 @@ class TerminalView(QMainWindow):
                 self.echo_message('>> Input access key:')
             elif command in COMMAND_SYSTEM_STATUS:
                 self.echo_message('>> System status: RUNNING. \n'
-                                '     Process ID: <0x5239>\n'
-                                '     Num. Threads: <{}>'.format(randint(20, 60)))
+                                  '     Process ID: <0x5239>\n'
+                                  '     Num. Threads: <{}>'.format(randint(20, 60)))
             elif command in COMMAND_WEAPONS_ENABLE:
                 self.echo_message('>> Weapons already enabled.')
             elif command in COMMAND_WEAPONS_DISABLE:
                 self.echo_message('>> SYSTEM ERROR: Could not disable weapons. Unauthorized action.')
             elif command in COMMAND_SERVER_STATUS:
                 self.echo_message('>> Server status: RUNNING. \n'
-                                '     Status code: [200]\n'
-                                '     Error queue: <Empty>')
+                                  '     Status code: [200]\n'
+                                  '     Error queue: <Empty>')
             elif command == COMMAND_SERVER_KEY:
                 options = QFileDialog.Options()
                 destination, _ = QFileDialog.getSaveFileName(self.window(), "Save Server Key", "",
-                                                        'SKEY Files (*.skey)',
-                                                        options=options)
+                                                             'SKEY Files (*.skey)',
+                                                             options=options)
                 if destination:
                     source = 'resources/server/key'
                     shutil.copyfile(source, destination) 
@@ -165,7 +164,7 @@ class TerminalView(QMainWindow):
             elif command in COMMAND_ENGINES_START:
                 self.echo_message('>> Engines already running.')
             elif command in COMMAND_ENGINES_STOP:
-                self.echo_message('>> SYSTEM ERROR:  Could not stop engines. Insuficient permissions.')
+                self.echo_message('>> SYSTEM ERROR:  Could not stop engines. Insufficient permissions.')
             else:
                 self.echo_message('>> Unknown command.')
         else:
@@ -199,13 +198,16 @@ class TerminalView(QMainWindow):
     def print_status(self):
         if self.__prompt_type == TYPE_PROMPT_WEAPONS:
             self.echo_message(choice(MSG_AUTOMATIC_WEAPONS).format(
-                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(ascii_uppercase), randint(1, 50), choice(STATUS_WEAPONS)))
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(ascii_uppercase),
+                randint(1, 50), choice(STATUS_WEAPONS)))
         elif self.__prompt_type == TYPE_PROMPT_SERVER:
             self.echo_message(choice(MSG_AUTOMATIC_SERVER).format(
                 datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(STATUS_SERVER)))
         elif self.__prompt_type == TYPE_PROMPT_ENGINES:
             self.echo_message(choice(MSG_AUTOMATIC_ENGINES).format(
-                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(), choice(STATUS_ENGINES)))
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(),
+                choice(STATUS_ENGINES)))
         else:
             self.echo_message('>> [{}] - STATUS <{}> - {}'.format(
-                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(), 'PASS'))
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'),
+                hex(randint(5000, 10000)).upper(), 'PASS'))

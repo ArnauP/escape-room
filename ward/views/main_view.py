@@ -1,9 +1,8 @@
-from PyQt5.QtWidgets import QVBoxLayout, QWidget, QComboBox, QLabel, QMainWindow, QSystemTrayIcon, QMenu, QAction, qApp, QLineEdit, QPushButton
-from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtWidgets import QVBoxLayout, QWidget, QLabel, QMainWindow, QLineEdit, QPushButton
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QSize, Qt
 
 from ..constants import *
-from ..utils.utils import *
 
 
 class MainView(QMainWindow):

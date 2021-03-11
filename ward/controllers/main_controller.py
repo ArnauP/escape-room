@@ -2,7 +2,6 @@ from PyQt5.QtCore import QObject
 
 from ..views.terminal_view import TerminalView
 from ..views.main_view import MainView
-from ..utils.utils import *
 from ..constants import *
 
 
