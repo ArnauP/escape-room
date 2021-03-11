@@ -27,10 +27,10 @@ class MainController(QObject):
     
     def init_command_prompts(self):
         self.__prompt_info_1 = TerminalView(self, 'Server prompt',
-                                            command_line=False, automatic=True, timeout=2000, position=[-900, -400], 
+                                            command_line=False, automatic=True, timeout=1500, position=[-900, -400], 
                                             prompt_type='server')
         self.__prompt_info_2 = TerminalView(self, 'Weapons prompt',
-                                            command_line=False, automatic=True, timeout=1500, position=[-900, 100], 
+                                            command_line=False, automatic=True, timeout=1200, position=[-900, 100], 
                                             prompt_type='weapons')
         self.__prompt_info_3 = TerminalView(self, 'Engines prompt',
                                             command_line=False, automatic=True, timeout=1000, position=[100, -400], 

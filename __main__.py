@@ -1,12 +1,13 @@
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtGui import QIcon, QFont
 
-from .controllers.main_controller import MainController
-from .utils.utils import *
-from .constants import *
+from ward.controllers.main_controller import MainController
+from ward.utils.utils import *
+from ward.constants import *
 
 
 def main():
+    print('hey')
     app = QApplication([])
     app.setWindowIcon(QIcon(get_path(PATH_ICON)))
     load_style_sheet(get_path(PATH_STYLE), app)

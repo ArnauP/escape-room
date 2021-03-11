@@ -4,7 +4,7 @@ from datetime import datetime
 from time import time
 
 
-PATH_ICON = 'resources/icons/black-hole.png'
+PATH_ICON = 'resources/icons/app.png'
 PATH_STYLE = 'resources/style/style.css'
 
 TYPE_PROMPT_SERVER = 'server'
