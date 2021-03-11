@@ -4,7 +4,7 @@ PASSWORDS
         password: 435733
 
     shutdown system:
-        password: SerraDelinquent
+        password: SerraDelinquent26
 
 PISTAS (En ordre en cas de que les necessiti):
     1 - Utilitzar el modul base64 pot ser útil.
