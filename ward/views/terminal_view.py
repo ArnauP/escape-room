@@ -14,9 +14,7 @@ import shutil
 
 class ShutDownThread(QThread):
     echo_msg = pyqtSignal(str)
-    shut_down_weapons = pyqtSignal()
-    shut_down_engines = pyqtSignal()
-    shut_down_server = pyqtSignal()
+    shut_down_prompt = pyqtSignal(str)
     shut_down_done = pyqtSignal()
 
     def __init__(self):
@@ -27,26 +25,18 @@ class ShutDownThread(QThread):
     def run(self):
         async def callback():
             while not self.__stop:
-                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 5')
-                sleep(1)
-                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 4')
-                sleep(1)
-                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 3')
-                sleep(1)
-                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 2')
-                sleep(1)
-                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 1')
-                sleep(1)
-                self.echo_msg.emit('SHUTTING DOWN <SERVER>... \n')
-                self.shut_down_server.emit()
-                sleep(1)
-                self.echo_msg.emit('SHUTTING DOWN <WEAPONS>... \n')
-                self.shut_down_weapons.emit()
-                sleep(1)
-                self.echo_msg.emit('SHUTTING DOWN <ENGINES>... \n')
-                self.shut_down_engines.emit()
-                sleep(1)
+                for second in range(5, 0, -1):
+                    self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN {}'.format(second))
+                    sleep(1)
+                
+                for promt in [TYPE_PROMPT_SERVER, TYPE_PROMPT_WEAPONS, TYPE_PROMPT_ENGINES]:
+                    self.echo_msg.emit('SHUTTING DOWN <{}>... \n'.format(promt.upper()))
+                    self.shut_down_prompt.emit(promt)
+                    sleep(1)
+
                 self.echo_msg.emit('KILLING RUNNING THREADS... \n')
+                sleep(1)
+                self.echo_msg.emit('KILLING MAIN PROCESS... \n')
                 sleep(1)
                 self.echo_msg.emit('SHUTTING DOWN <SYSTEM>...')
                 sleep(2)
@@ -182,9 +172,7 @@ class TerminalView(QMainWindow):
             if command == RESPONSE_SHUTDOWN_PASSWORD:
                 self.__shutdown_thread = ShutDownThread()
                 self.__shutdown_thread.echo_msg.connect(self.echo_message)
-                self.__shutdown_thread.shut_down_weapons.connect(self.__ctrl.shut_down_weapons)
-                self.__shutdown_thread.shut_down_server.connect(self.__ctrl.shut_down_server)
-                self.__shutdown_thread.shut_down_engines.connect(self.__ctrl.shut_down_engines)
+                self.__shutdown_thread.shut_down_prompt.connect(self.__ctrl.shut_down_prompt)
                 self.__shutdown_thread.shut_down_done.connect(self.__ctrl.system_shutdown)
                 self.__shutdown_thread.start()
             else:
