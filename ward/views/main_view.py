@@ -33,7 +33,7 @@ class MainView(QMainWindow):
         self.lbl_username = QLabel('Username')
         self.le_username = QLineEdit('Admin')
         self.lbl_password = QLabel('Password')
-        self.le_password = QLineEdit('test')
+        self.le_password = QLineEdit(EXPECTED_PASSWORD)
         self.le_password.setEchoMode(QLineEdit.Password)
 
         self.lbl_error = QLabel()

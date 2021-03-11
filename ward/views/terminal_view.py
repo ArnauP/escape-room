@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QVBoxLayout, QWidget, QComboBox, QLabel, QMainWindow, QSystemTrayIcon, QMenu, QAction, qApp, QLineEdit, QPushButton
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt, QTimer, QThread, pyqtSignal
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QFileDialog
 from random import randint, choice
 from time import sleep
 
@@ -96,7 +96,7 @@ class TerminalView(QMainWindow):
             self.lbl_promt.setFixedSize(690, 290)
             self.le_commands.hide()
         else:
-            self.echo_command(MSG_HELP)
+            self.echo_message(MSG_HELP)
             self.max_lines_prompted = 14
             self.lbl_promt.setFixedSize(690, 220)
 
@@ -148,38 +148,42 @@ class TerminalView(QMainWindow):
     def parse_command(self, command):
         if not self.__awaiting_response:
             if command == COMMAND_HELP:
-                self.echo_command(MSG_HELP_RESPONSE)
+                self.echo_message(MSG_HELP_RESPONSE)
             elif command == COMMAND_SYSTEM_SHUTDOWN:
                 self.__awaiting_response = True
-                self.echo_command('>> Required SYSTEM password:')
+                self.echo_message('>> Required SYSTEM password:')
             elif command in COMMAND_SYSTEM_STATUS:
-                self.echo_command('>> System status: RUNNING. \n'
+                self.echo_message('>> System status: RUNNING. \n'
                                 '     Process ID: 0x5239\n'
                                 '     Num. Threads: {}'.format(randint(20, 60)))
             elif command in COMMAND_WEAPONS_ENABLE:
-                self.echo_command('>> Weapons already enabled.')
+                self.echo_message('>> Weapons already enabled.')
             elif command in COMMAND_WEAPONS_DISABLE:
-                self.echo_command('>> Could not disable weapons.')
+                self.echo_message('>> Could not disable weapons.')
             elif command in COMMAND_SERVER_STATUS:
-                self.echo_command('>> Server status: RUNNING. \n'
+                self.echo_message('>> Server status: RUNNING. \n'
                                 '     Status code: 200\n'
                                 '     Error queue: Empty')
             elif command == COMMAND_SERVER_KEY:
-                destination = 'key'
-                source = 'resources/server/key'
-                shutil.copyfile(source, destination) 
-                self.echo_command('>>  Downloading key...')
-                self.echo_command('>>  Done. \n      Key path: "{}"'.format(destination))
+                options = QFileDialog.Options()
+                destination, _ = QFileDialog.getSaveFileName(self.window(), "Save Server Key", "",
+                                                        'SKEY Files (*.skey)',
+                                                        options=options)
+                if destination:
+                    source = 'resources/server/key'
+                    shutil.copyfile(source, destination) 
+                    self.echo_message('>>  Downloading key...')
+                    self.echo_message('>>  Done. \n      Key path: "{}"'.format(destination))
             elif command in COMMAND_ENGINES_START:
-                self.echo_command('>> Engines already running.')
+                self.echo_message('>> Engines already running.')
             elif command in COMMAND_ENGINES_STOP:
-                self.echo_command('>> Could not stop engines.')
+                self.echo_message('>> Could not stop engines.')
             else:
-                self.echo_command('>> Unknown command.')
+                self.echo_message('>> Unknown command.')
         else:
             if command == RESPONSE_SHUTDOWN_PASSWORD:
                 self.__shutdown_thread = ShutDownThread()
-                self.__shutdown_thread.echo_msg.connect(self.echo_command)
+                self.__shutdown_thread.echo_msg.connect(self.echo_message)
                 self.__shutdown_thread.shut_down_weapons.connect(self.__ctrl.shut_down_weapons)
                 self.__shutdown_thread.shut_down_server.connect(self.__ctrl.shut_down_server)
                 self.__shutdown_thread.shut_down_engines.connect(self.__ctrl.shut_down_engines)
@@ -187,9 +191,9 @@ class TerminalView(QMainWindow):
                 self.__shutdown_thread.start()
             else:
                 self.__awaiting_response = False
-                self.echo_command('>> Unauthorized access. Wrong credentials.')
+                self.echo_message('>> Unauthorized access. Wrong credentials.')
 
-    def echo_command(self, command):
+    def echo_message(self, command):
         current_lines = self.lbl_promt.text().split('\n')
         incoming_lines = command.split('\n')
         if current_lines is not None:
@@ -208,13 +212,13 @@ class TerminalView(QMainWindow):
     
     def print_status(self):
         if self.__prompt_type == TYPE_PROMPT_WEAPONS:
-            self.echo_command(choice(MSG_AUTOMATIC_WEAPONS).format(
+            self.echo_message(choice(MSG_AUTOMATIC_WEAPONS).format(
                 datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(ascii_uppercase), randint(1, 50), choice(STATUS_WEAPONS)))
         elif self.__prompt_type == TYPE_PROMPT_SERVER:
-            self.echo_command(choice(MSG_AUTOMATIC_SERVER).format(
+            self.echo_message(choice(MSG_AUTOMATIC_SERVER).format(
                 datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(STATUS_SERVER)))
         elif self.__prompt_type == TYPE_PROMPT_ENGINES:
-            self.echo_command(choice(MSG_AUTOMATIC_ENGINES).format(
+            self.echo_message(choice(MSG_AUTOMATIC_ENGINES).format(
                 datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(), choice(STATUS_ENGINES)))
         else:
-            self.echo_command('STATUS: PASS')
+            self.echo_message('STATUS: PASS')
