@@ -42,6 +42,15 @@ class MainController(QObject):
         self.__allow_connections = False
         self.close_all_promts()
         self.__view.reset_view(keep_pwd=False)
+    
+    def shut_down_server(self):
+        self.__prompt_info_1.close()
+
+    def shut_down_weapons(self):
+        self.__prompt_info_2.close()
+    
+    def shut_down_engines(self):
+        self.__prompt_info_3.close()
 
     def close_all_promts(self):
         if self.__prompt_info_1:

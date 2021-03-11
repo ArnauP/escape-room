@@ -14,10 +14,12 @@ import shutil
 
 class ShutDownThread(QThread):
     echo_msg = pyqtSignal(str)
+    shut_down_weapons = pyqtSignal()
+    shut_down_engines = pyqtSignal()
+    shut_down_server = pyqtSignal()
     shut_down_done = pyqtSignal()
 
     def __init__(self):
-        """ Constructor, setting initial variables """
         super(ShutDownThread, self).__init__()
         self.__stop = False
         self.__loop = asyncio.new_event_loop()
@@ -25,13 +27,28 @@ class ShutDownThread(QThread):
     def run(self):
         async def callback():
             while not self.__stop:
+                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 5')
+                sleep(1)
+                self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 4')
+                sleep(1)
                 self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 3')
                 sleep(1)
                 self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 2')
                 sleep(1)
                 self.echo_msg.emit('SYSTEM WILL BE SHUT DOWN IN 1')
                 sleep(1)
-                self.echo_msg.emit('SHUTTING DOWN THE SYSTEM...')
+                self.echo_msg.emit('SHUTTING DOWN <SERVER>... \n')
+                self.shut_down_server.emit()
+                sleep(1)
+                self.echo_msg.emit('SHUTTING DOWN <WEAPONS>... \n')
+                self.shut_down_weapons.emit()
+                sleep(1)
+                self.echo_msg.emit('SHUTTING DOWN <ENGINES>... \n')
+                self.shut_down_engines.emit()
+                sleep(1)
+                self.echo_msg.emit('KILLING RUNNING THREADS... \n')
+                sleep(1)
+                self.echo_msg.emit('SHUTTING DOWN <SYSTEM>...')
                 sleep(2)
                 self.shut_down_done.emit()
 
@@ -137,16 +154,16 @@ class TerminalView(QMainWindow):
                 self.echo_command('>> Required SYSTEM password:')
             elif command in COMMAND_SYSTEM_STATUS:
                 self.echo_command('>> System status: RUNNING. \n'
-                                '    Process ID: 0x5239\n'
-                                '    Num. Threads: {}'.format(randint(20, 60)))
+                                '     Process ID: 0x5239\n'
+                                '     Num. Threads: {}'.format(randint(20, 60)))
             elif command in COMMAND_WEAPONS_ENABLE:
                 self.echo_command('>> Weapons already enabled.')
             elif command in COMMAND_WEAPONS_DISABLE:
                 self.echo_command('>> Could not disable weapons.')
             elif command in COMMAND_SERVER_STATUS:
                 self.echo_command('>> Server status: RUNNING. \n'
-                                '    Status code: 200\n'
-                                '    Error queue: Empty')
+                                '     Status code: 200\n'
+                                '     Error queue: Empty')
             elif command == COMMAND_SERVER_KEY:
                 destination = 'key'
                 source = 'resources/server/key'
@@ -163,11 +180,14 @@ class TerminalView(QMainWindow):
             if command == RESPONSE_SHUTDOWN_PASSWORD:
                 self.__shutdown_thread = ShutDownThread()
                 self.__shutdown_thread.echo_msg.connect(self.echo_command)
+                self.__shutdown_thread.shut_down_weapons.connect(self.__ctrl.shut_down_weapons)
+                self.__shutdown_thread.shut_down_server.connect(self.__ctrl.shut_down_server)
+                self.__shutdown_thread.shut_down_engines.connect(self.__ctrl.shut_down_engines)
                 self.__shutdown_thread.shut_down_done.connect(self.__ctrl.system_shutdown)
                 self.__shutdown_thread.start()
             else:
                 self.__awaiting_response = False
-                self.echo_command('>> Unauthorized acces. Wrong credentials.')
+                self.echo_command('>> Unauthorized access. Wrong credentials.')
 
     def echo_command(self, command):
         current_lines = self.lbl_promt.text().split('\n')
