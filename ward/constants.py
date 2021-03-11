@@ -32,13 +32,13 @@ COMMAND_HELP = 'help'
 
 MSG_HELP = '>> For command information use "{}".'.format(COMMAND_HELP)
 MSG_HELP_RESPONSE = '\n>> Options and arguments available:\n' \
-                    '       - Server commands:\n' \
-                    '               {}\n' \
-                    '               {}\n' \
                     '       - Weapons commands:\n' \
                     '               {}\n' \
                     '               {}\n' \
                     '       - Engine commands:\n' \
+                    '               {}\n' \
+                    '               {}\n' \
+                    '       - Server commands:\n' \
                     '               {}\n' \
                     '               {}\n' \
                     '       - System commands:\n' \

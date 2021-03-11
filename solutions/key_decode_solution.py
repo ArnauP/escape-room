@@ -1,6 +1,6 @@
 import base64
 
-f = open("key", "r")
+f = open("key.skey", "r")
 img = f.read()
 
 with open("key.png", "wb") as fh:
