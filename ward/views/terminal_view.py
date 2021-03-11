@@ -151,19 +151,19 @@ class TerminalView(QMainWindow):
                 self.echo_message(MSG_HELP_RESPONSE)
             elif command == COMMAND_SYSTEM_SHUTDOWN:
                 self.__awaiting_response = True
-                self.echo_message('>> Required SYSTEM password:')
+                self.echo_message('>> Input access key:')
             elif command in COMMAND_SYSTEM_STATUS:
                 self.echo_message('>> System status: RUNNING. \n'
-                                '     Process ID: 0x5239\n'
-                                '     Num. Threads: {}'.format(randint(20, 60)))
+                                '     Process ID: <0x5239>\n'
+                                '     Num. Threads: <{}>'.format(randint(20, 60)))
             elif command in COMMAND_WEAPONS_ENABLE:
                 self.echo_message('>> Weapons already enabled.')
             elif command in COMMAND_WEAPONS_DISABLE:
-                self.echo_message('>> Could not disable weapons.')
+                self.echo_message('>> SYSTEM ERROR: Could not disable weapons. Unauthorized action.')
             elif command in COMMAND_SERVER_STATUS:
                 self.echo_message('>> Server status: RUNNING. \n'
-                                '     Status code: 200\n'
-                                '     Error queue: Empty')
+                                '     Status code: [200]\n'
+                                '     Error queue: <Empty>')
             elif command == COMMAND_SERVER_KEY:
                 options = QFileDialog.Options()
                 destination, _ = QFileDialog.getSaveFileName(self.window(), "Save Server Key", "",
@@ -177,7 +177,7 @@ class TerminalView(QMainWindow):
             elif command in COMMAND_ENGINES_START:
                 self.echo_message('>> Engines already running.')
             elif command in COMMAND_ENGINES_STOP:
-                self.echo_message('>> Could not stop engines.')
+                self.echo_message('>> SYSTEM ERROR:  Could not stop engines. Insuficient permissions.')
             else:
                 self.echo_message('>> Unknown command.')
         else:
@@ -221,4 +221,5 @@ class TerminalView(QMainWindow):
             self.echo_message(choice(MSG_AUTOMATIC_ENGINES).format(
                 datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(), choice(STATUS_ENGINES)))
         else:
-            self.echo_message('STATUS: PASS')
+            self.echo_message('>> [{}] - STATUS <{}> - {}'.format(
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(), 'PASS'))

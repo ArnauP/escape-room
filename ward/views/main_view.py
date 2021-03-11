@@ -33,7 +33,7 @@ class MainView(QMainWindow):
         self.lbl_username = QLabel('Username')
         self.le_username = QLineEdit('Admin')
         self.lbl_password = QLabel('Password')
-        self.le_password = QLineEdit(EXPECTED_PASSWORD)
+        self.le_password = QLineEdit()
         self.le_password.setEchoMode(QLineEdit.Password)
 
         self.lbl_error = QLabel()
@@ -63,6 +63,8 @@ class MainView(QMainWindow):
         self.main_widget.setLayout(main_layout)
 
         self.setCentralWidget(self.main_widget)
+
+        self.le_password.setFocus()
 
         self.show()
     
