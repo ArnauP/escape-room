@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QFile, QTextStream
+import base64
 import os
 
 
@@ -11,3 +12,6 @@ def load_style_sheet(stylesheet, obj):
     file.open(QFile.ReadOnly)
     obj.setStyleSheet(QTextStream(file).readAll())
     file.close()
+
+def encode_image(image_path):
+    pass

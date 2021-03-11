@@ -2,8 +2,7 @@ from PyQt5.QtWidgets import QVBoxLayout, QWidget, QComboBox, QLabel, QMainWindow
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QSize, Qt, QTimer, QThread, pyqtSignal
 from PyQt5.QtWidgets import QApplication
-from random import seed
-from random import randint
+from random import randint, choice
 from time import sleep
 import asyncio
 
@@ -43,12 +42,13 @@ class ShutDownThread(QThread):
 
 class TerminalView(QMainWindow):
 
-    def __init__(self, ctrl, title, command_line=False, automatic=False, timeout=1000, position=None):
+    def __init__(self, ctrl, title, command_line=False, automatic=False, timeout=1000, position=None, prompt_type=None):
         super(TerminalView, self).__init__()
         self.__ctrl = ctrl
         self.__title = title
         self.__command_line = command_line
         self.__position = position
+        self.__prompt_type = prompt_type
         self.max_lines_prompted = 18
 
         if automatic:
@@ -82,6 +82,22 @@ class TerminalView(QMainWindow):
         main_layout = QVBoxLayout()
         main_layout.setAlignment(Qt.AlignCenter)
 
+        self.main_widget.setStyleSheet(
+            """
+            QWidget {
+                background-color: black;
+            }
+            QLabel {
+                background-color: transparent;
+                color: green;
+            }
+            QLineEdit {
+                background-color: transparent;
+                color: green;
+            }
+            """
+        )
+
         # Setup layouts
         main_layout.addWidget(self.lbl_promt)
         main_layout.addWidget(self.le_commands)
@@ -109,7 +125,7 @@ class TerminalView(QMainWindow):
         return super().keyPressEvent(event)
 
     def parse_command(self, command):
-        if command.upper() == 'HELP':
+        if command == COMMAND_HELP:
             self.echo_command(MSG_HELP_RESPONSE)
         elif command == COMMAND_SYSTEM_SHUTDOWN:
             self.__shutdown_thread = ShutDownThread()
@@ -131,11 +147,11 @@ class TerminalView(QMainWindow):
         elif command == COMMAND_SERVER_KEY:
             self.echo_command('\n>>  Downloading key...')
         elif command in COMMAND_ENGINES_START:
-            self.echo_command('\n>> Engines already running at 557000 rmp.')
+            self.echo_command('\n>> Engines already running.')
         elif command in COMMAND_ENGINES_STOP:
-            pass
+            self.echo_command('\n>> Could not stop engines.')
         else:
-            self.echo_command('\n>> Unknown command.')
+            self.echo_command('>> Unknown command.')
 
     def echo_command(self, command):
         current_lines = self.lbl_promt.text().split('\n')
@@ -155,4 +171,14 @@ class TerminalView(QMainWindow):
         self.lbl_promt.setText(str_displayed_lines.replace('\n\n', '\n'))
     
     def print_status(self):
-        self.echo_command('STATUS: PASS')
+        if self.__prompt_type == TYPE_PROMPT_WEAPONS:
+            self.echo_command(choice(MSG_AUTOMATIC_WEAPONS).format(
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(ascii_uppercase), randint(1, 50), choice(STATUS_WEAPONS)))
+        elif self.__prompt_type == TYPE_PROMPT_SERVER:
+            self.echo_command(choice(MSG_AUTOMATIC_SERVER).format(
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), choice(STATUS_SERVER)))
+        elif self.__prompt_type == TYPE_PROMPT_ENGINES:
+            self.echo_command(choice(MSG_AUTOMATIC_ENGINES).format(
+                datetime.fromtimestamp(time()).strftime('%Y-%m-%d %H:%M:%S'), hex(randint(5000, 10000)).upper(), choice(STATUS_ENGINES)))
+        else:
+            self.echo_command('STATUS: PASS')

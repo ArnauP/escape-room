@@ -15,7 +15,7 @@ class MainView(QMainWindow):
 
     def build_ui(self):
         self.setWindowTitle('Control Panel')
-        self.setFixedSize(300, 350)
+        self.setFixedSize(300, 400)
 
         # Init widgets
         self.main_widget = QWidget()
