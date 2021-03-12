@@ -1,0 +1,13 @@
+PASSWORDS
+    LOGIN:
+        username: Admin
+        password: 435733
+
+    shutdown system:
+        password: SerraDelinquent26
+
+PISTAS (En ordre en cas de que les necessiti):
+    1 - Utilitzar el modul base64 pot ser útil.
+    2 - La descodificacio no necessàriament ha de tenir un string com a output.
+    3 - La key es la representació ASCII del binari de la contrasenya.
+    4 - Sha de convertir la key a imatge. (Aquesta pràcticament et diu la solució)

@@ -1,0 +1,87 @@
+QWidget
+{
+    color: #eff0f1;
+    background-color: #36393F;
+    background-clip: border;
+    border-image: none;
+    border: 0px transparent black;
+    outline: 0;
+    outline: 0;
+    font-size: 13px;
+}
+
+QPushButton
+{
+    background-color: #7289DA;
+    width: 60px;
+    font-weight: bold;
+    padding: 5px;
+    border-width: 0px;
+    border-style: solid;
+    border-radius: 3px;
+    outline: none;
+    width: 70px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+QPushButton:disabled
+{
+    background-color: #5a6897;
+    color: #999999;
+    border-color: #454545;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+QPushButton:pressed
+{
+    background-color: #90a8ff;
+    padding-top: -15px;
+    padding-bottom: -17px;
+}
+
+QComboBox
+{
+    border-style: solid;
+    border: 1px solid #76797C;
+    border-radius: 2px;
+    padding: 5px;
+    width: 130px;
+    height: 15px;
+    background-color: #232629;
+    selection-background-color: #007ACC;
+}
+
+QComboBox:on
+{
+    padding-top: 3px;
+    padding-left: 4px;
+    selection-background-color: #4a4a4a;
+}
+
+QLineEdit
+{
+    background-color: #232629;
+    border: 1px solid #76797C;
+    border-radius: 2px;
+    padding: 5px;
+    max-width: 150px;
+    height: 15px;
+}
+
+QLineEdit:disabled
+{
+    background-color: #303030;
+    border: 1px solid #36393b;
+    color: #4a4a4a;
+    border-radius: 2px;
+    padding: 5px;
+    max-width: 150px;
+    height: 15px;
+}
+
+QLabel
+{
+    border-radius: 5px;
+}

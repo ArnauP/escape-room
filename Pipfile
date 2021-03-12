@@ -1,0 +1,16 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[requires]
+python_version = "3.6.5"
+
+[packages]
+numpy = "==1.17.2"
+"pyqt5" = "==5.11.2"
+
+[dev-packages]
+pyinstaller = "==3.4"
+"flake8" = "*"
+pycodestyle = "*"
